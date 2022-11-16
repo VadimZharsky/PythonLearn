@@ -19,6 +19,6 @@ clr.AddReference(pathDLL)
 
 from CalcSharp import CalcSharp
 
-exp = CalcSharp("exp","454554445111/12121324323121")
+exp = CalcSharp("exp","454554445111/12121324323")
 result = exp.resolver()
 print(result)
