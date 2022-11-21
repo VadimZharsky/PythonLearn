@@ -17,11 +17,12 @@ def triangle_is_valid(arr):
         return("Triangle is valid. Equilateral triangle is builded")
     arr.sort()
     #To check validity of triangle we need sum of two sides greater than the base 
-    if((arr[0]+arr[1])<=arr[2]):
+    if((arr[0]+arr[1]) <= arr[2]):
         return f"Triangle is invalid. The sum of first side {arr[0]} and second side {arr[1]} is {arr[0]+arr[1]} and must be greater than the base {arr[2]}"
-    isosceles = is_isosceles(arr[0], arr[1])
-    if (isosceles is True):
+    if (arr[0] == arr[1]):
         return(f"Triangle is valid. Isosceles triangle is builded with two equal sides {arr[0]} and base {arr[2]}")
+    if (arr[1] == arr[2]):
+        return(f"Triangle is valid. Isosceles triangle is builded with two equal sides {arr[1]} and base {arr[0]}")
     else:
         return(f"Triangle is valid. Scalene triangle is builded with {arr[0]} side, {arr[1]} second side and a base {arr[2]}")
 
@@ -30,13 +31,7 @@ def is_equilateral(arr):
     if (arr[0] == arr[1] and arr[0] == arr[2]):
         return True
     return False
-
-def is_isosceles(first, second):
-    #two sides are equal
-    if (first == second):
-        return True
-    return False
-    
+   
 
 if __name__ == '__main__':
     main()
