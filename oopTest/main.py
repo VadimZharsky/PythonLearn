@@ -1,10 +1,16 @@
 from lib.triagle import Triangle
 
 def main():
-    triange1 = Triangle(6, 6, 8.4852)
-    print(triange1.get_sides())
-    triange1.is_valid()
-    triange1.get_angles()
+    instructor("tringle1", [4,5,6])
+    instructor("tringle2", [8,9,8])
+    instructor("tringle3", [34,15,20])
+    instructor("tringle4", [15,15,15])
+
+def instructor(name, sides):
+    name = Triangle(sides[0], sides[1], sides[2])
+    print(name.get_sides())
+    name.is_valid()
+    name.get_angles()
 
 
 if __name__ == '__main__':
