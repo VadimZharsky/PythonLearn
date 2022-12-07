@@ -10,6 +10,7 @@ class Triangle:
         self.__c = c
         self.__arr_sides = self.sides(a, b, c)
 
+
     def sides(self, a, b, c):
         try:
             arr_sides = []
