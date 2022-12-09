@@ -7,20 +7,21 @@ def differ(orig: set, template: set) -> set:
 
 
 def main():
-    len_atr = len(helpers.ATTRS_NO_TEST)
-    print('HelloWorld')
-    print(len_atr)
-    len_list = differ(set(dir(list)), helpers.ATTRS_NO_TEST)
-    len_dict = differ(set(dir(dict)), helpers.ATTRS_NO_TEST)
-    len_str = differ(set(dir(str)), helpers.ATTRS_NO_TEST)
-    len_set = differ(set(dir(set)), helpers.ATTRS_NO_TEST)
-    len_tuple = differ(set(dir(tuple)), helpers.ATTRS_NO_TEST)
-    print(f"{len(len_tuple)} + {len(len_set)} + {len(len_str)} + {len(len_dict)} + {len(len_list)}")
-    print(f"{set(dir(tuple))}\n{len_tuple}")
+    # len_atr = len(helpers.ATTRS_NO_TEST)
+    # print('HelloWorld')
+    # print(len_atr)
+    # len_list = differ(set(dir(list)), helpers.ATTRS_NO_TEST)
+    # len_dict = differ(set(dir(dict)), helpers.ATTRS_NO_TEST)
+    # len_str = differ(set(dir(str)), helpers.ATTRS_NO_TEST)
+    # len_set = differ(set(dir(set)), helpers.ATTRS_NO_TEST)
+    # len_tuple = differ(set(dir(tuple)), helpers.ATTRS_NO_TEST)
+    # print(f"{len(len_tuple)} + {len(len_set)} + {len(len_str)} + {len(len_dict)} + {len(len_list)}")
+    # print(f"{set(dir(tuple))}\n{len_tuple}")
 
 
     test_list = [4, 2, 3]
     testing_dict = {1:'one', 2:'two'}
+    t_set = {1, 2}
     str1 = repr("")
     print(str1)
 
@@ -149,10 +150,25 @@ def main():
 
     # Set methods
     
+    t_set |= {3}
+    assert t_set == {1, 2, 3}
+    t_set.remove(1)
+    assert t_set == {2, 3}
+    temp_set = {3, 8, 4}
+    t_set = t_set.symmetric_difference(temp_set)
+    assert t_set == {8, 2, 4}
+    t_set.difference_update({4, 7})
+    assert t_set == {2, 8}
+    assert 2 in t_set
+    t_set.symmetric_difference_update({5, 4, 2})
+    assert t_set == {4, 5, 8}
+    assert not isinstance(t_set, Hashable)
+    t_set = t_set & {4, 5, 1}
+    assert t_set == {4, 5}
+    t_set = t_set | {1, 4}
+    assert t_set == {1, 4, 5}
 
-
-
-    print(repr(testing_dict))
+    print(repr(t_set))
     
 
 if __name__ == "__main__":

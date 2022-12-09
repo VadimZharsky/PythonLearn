@@ -107,7 +107,7 @@ set1 = {
         'remove',
         'symmetric_difference',
         'difference_update',
-        '__sub__',
+        '__sub__', ##################
         '__contains__',
         'symmetric_difference_update',
         '__hash__',
