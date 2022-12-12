@@ -133,6 +133,7 @@ def main():
     assert testing_dict == {2: 'two', 3: '3', 4: '4'}
     testing_dict.popitem()
     assert testing_dict == {2: 'two', 3: '3'}
+    assert testing_dict != {}
     assert 3 in testing_dict
     assert testing_dict.copy() == {2: 'two', 3: '3'}
     assert testing_dict.get(2) == 'two'
@@ -167,8 +168,61 @@ def main():
     assert t_set == {4, 5}
     t_set = t_set | {1, 4}
     assert t_set == {1, 4, 5}
+    t_set = t_set.difference({1, 8})
+    assert t_set == {4, 5}
+    t_set = t_set ^ {5, 6, 7}
+    assert t_set == {4, 6, 7}
+    t_set ^= {7, 8}
+    assert t_set == {4, 6, 8}
+    assert t_set.isdisjoint({1, 2})
+    t_set.discard(8)
+    assert t_set == {4, 6}
+    t_set &= {4, 7}
+    assert t_set == {4}
+    temp_set = t_set.copy()
+    assert temp_set == t_set
+    t_set.update({7 ,8 ,9 })
+    assert t_set == {8, 9, 4, 7}
+    assert t_set.issuperset({4, 7})
+    t_set = t_set.intersection({4, 6, 8})
+    assert t_set == {8, 4}
+    t_set = t_set.union({5, 9})
+    assert t_set == {8, 9, 4, 5}
+    t_set.intersection_update({4, 5, 9})
+    assert t_set == {9, 4, 5}
+    t_set -= {9}
+    assert t_set == {4, 5}
+    t_set.add(1)
+    assert t_set == {1, 4, 5}
+    assert len(t_set) == 3
+    t_set = t_set - {4,}
+    assert t_set == {1, 5}
+    t_set.pop()
+    assert t_set == {5,} 
+    assert set() < t_set
+    assert set() <= t_set
+    assert t_set > set()
+    assert t_set >= set()
+    assert t_set.issubset({4, 5, 6})
+    t_set.clear()
+    assert not t_set
 
-    print(repr(t_set))
+    # tuple methods
+    t_tuple = (1,)
+    t_tuple = t_tuple + (3,)
+    assert t_tuple == (1, 3)
+    assert t_tuple[1] == 3
+    t_tuple = t_tuple * 2
+    assert t_tuple == (1, 3, 1, 3)
+    assert isinstance(t_tuple, Hashable)
+    assert 3 in t_tuple
+    assert len(t_tuple) == 4
+    assert t_tuple.index(3) == 1
+    assert t_tuple.count(3) == 2
+    assert (1,) < t_tuple
+    assert t_tuple >= (1,)
+
+    print(repr(t_tuple))
     
 
 if __name__ == "__main__":
