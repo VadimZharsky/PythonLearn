@@ -3,6 +3,7 @@ from time import sleep
 import pytest
 
 
+
 def typecheck(func):
     def checker(*args):
         if len(args) != 0:
@@ -35,13 +36,13 @@ class ExecutionCounter:
         self.call_count += 1
         return self.call_count
 
-
-def execute_counter(func) -> int:
-    call_count:int = 0 
-    def __call__():
-        call_count += 1
-        return call_count
-    return __call__
+def counter(func, counter_dict = {}):
+    counter_dict[func] = 0
+    def call_counter():
+        counter_dict[func] += 1
+        print(f"func: {func.__name__} called {counter_dict[func]} times")
+        return func()
+    return call_counter
 
 
 def do_twice(func) -> str:
@@ -59,11 +60,11 @@ def task_01_do_twice(text: str) -> str:
 
 class test_02:
 
-    @ExecutionCounter
+    @counter
     def f() -> int:
         return {"f", }
 
-    @ExecutionCounter
+    @counter
     def g() -> int:
         return {"g", }
 

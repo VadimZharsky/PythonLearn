@@ -13,9 +13,10 @@ def main():
     # result = [(tasks.test_02.f(), tasks.test_02.g()) for _ in range(0, 3)][-1]
     # print(result)
 
-    counter = [(tasks.test_02.f(), tasks.test_02.g()) for _ in range(0, 3)]
-    counter = [(tasks.test_02.f()) for _ in range (0, 3)]
-    print (counter)
+    [(tasks.test_02.f(), tasks.test_02.g()) for _ in range(0, 3)]
+    
+    
+    print (tasks.counter_dict["f"])
 
     # res1 = tasks.task_03_cashe("text_to cashe")
     # res3 = tasks.task_03_cashe("another text")
