@@ -8,10 +8,14 @@ def main():
     # assert tasks.task_01_do_twice("python") == "pythonpython"
 
     # result = tasks.task_02_count_calls()
-    counter: int = 0
-    assert not counter
-    result = [tasks.test_02() for _ in range(0, 3)][-1]
-    print(result)
+    # counter: int = 0
+    # assert not counter
+    # result = [(tasks.test_02.f(), tasks.test_02.g()) for _ in range(0, 3)][-1]
+    # print(result)
+
+    counter = [(tasks.test_02.f(), tasks.test_02.g()) for _ in range(0, 3)]
+    counter = [(tasks.test_02.f()) for _ in range (0, 3)]
+    print (counter)
 
     # res1 = tasks.task_03_cashe("text_to cashe")
     # res3 = tasks.task_03_cashe("another text")
@@ -19,11 +23,11 @@ def main():
     # assert z is res1
     # assert not z is res3
 
-    # time_sleep = 2
+    # time_sleep = 3
     # start_time = time.monotonic()
     # tasks.task_04_benchmark(time_sleep)
     # end_time = time.monotonic() - start_time
-    # assert abs(end_time - time_sleep)<0.1
+    # assert abs(end_time - time_sleep) < 0.1
     
     # assert tasks.f(4, 8) == 32
     # assert tasks.f(133, 56) == 7448
