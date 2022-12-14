@@ -1,11 +1,65 @@
 import time
 import pytest
+from typing import Any
 
 import tasks
 
+def test_01():
+
+    text = "text"
+    another_text = "Python"
+
+    @tasks.do_twice
+    def func_doubler(text: str) -> str:
+        return text
+
+    modif_text = func_doubler(text)
+    modif_another = func_doubler(another_text)
+    assert modif_text == "texttext"
+    assert modif_another == "PythonPython"
+
+
+def test_03():
+
+    @tasks.cashe_creator
+    def task_03_cashe(anything: Any) -> Any:
+        return anything
+
+    res1 = task_03_cashe("text_to_cashe")
+    res3 = task_03_cashe("another text")
+    z = [task_03_cashe("text_to_cashe") for _ in range(0, 3)][-1]
+    print(res1)
+    assert z is res1
+    assert not z is res3
+
+
+def test_04():
+
+    
+    def benchmark(some_var: Any) -> Any:
+        @tasks.cashe_creator
+        def deleter(some_var):
+            res = some_var[0]
+            while res > 1:
+                res = res / some_var[1]
+            return res 
+      
+        res_dict: dict = deleter(some_var)
+        res_dict_bench: dict = deleter(some_var)
+        print(res_dict)
+        print(res_dict_bench) 
+        return res_dict
+
+    time_sleep = 1
+    var_test = (52352435, 1.0000001, time_sleep)
+    benchmark(var_test)
+    # assert abs(end_time - time_sleep) < 0.1
+
 def main():
-    # assert tasks.task_01_do_twice("text") == "texttext"
-    # assert tasks.task_01_do_twice("python") == "pythonpython"
+
+    # test_01()
+    # test_03()
+    test_04()
 
     # result = tasks.task_02_count_calls()
     # counter: int = 0
@@ -13,23 +67,8 @@ def main():
     # result = [(tasks.test_02.f(), tasks.test_02.g()) for _ in range(0, 3)][-1]
     # print(result)
 
-    [(tasks.test_02.f(), tasks.test_02.g()) for _ in range(0, 3)]
-    
-    
-    print (tasks.counter_dict["f"])
-
-    # res1 = tasks.task_03_cashe("text_to cashe")
-    # res3 = tasks.task_03_cashe("another text")
-    # z = [tasks.task_03_cashe("text_to cashe") for _ in range(0, 3)][-1]
-    # assert z is res1
-    # assert not z is res3
-
-    # time_sleep = 3
-    # start_time = time.monotonic()
-    # tasks.task_04_benchmark(time_sleep)
-    # end_time = time.monotonic() - start_time
-    # assert abs(end_time - time_sleep) < 0.1
-    
+    # [(tasks.test_02.f(), tasks.test_02.g()) for _ in range(0, 3)]
+ 
     # assert tasks.f(4, 8) == 32
     # assert tasks.f(133, 56) == 7448
     # with pytest.raises(TypeError):

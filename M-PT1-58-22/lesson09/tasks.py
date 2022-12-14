@@ -1,5 +1,5 @@
 from typing import Any
-from time import sleep
+import time
 import pytest
 
 
@@ -18,13 +18,19 @@ def typecheck(func):
 
 def cashe_creator(func):
     memory = {}
+    timer = {}
     def inner(*args):
+        start_time = time.monotonic()
         if args in memory:
-            return memory[args]
+            time.sleep(args[0][2])
+            end_time = time.monotonic() - start_time
+            return {"result": memory[args], "end_time": end_time}
         else:
             rec_new = func(*args)
             memory[args] = rec_new
-            return rec_new
+            time.sleep(args[0][2])
+            end_time = time.monotonic() - start_time
+            return {"result": rec_new, "end_time": end_time}
     return inner
 
 
@@ -53,13 +59,9 @@ def do_twice(func) -> str:
     return doubler
 
 
-@do_twice
-def task_01_do_twice(text: str) -> str:
-    return(text)
-
 
 class test_02:
-
+    counter_dict = {}
     @counter
     def f() -> int:
         return {"f", }
@@ -67,17 +69,6 @@ class test_02:
     @counter
     def g() -> int:
         return {"g", }
-
-
-@cashe_creator
-def task_03_cashe(anything: Any) -> Any:
-    return anything
-
-
-@cashe_creator
-def task_04_benchmark(sleep_time: int) -> Any:
-    sleep(sleep_time)
-    return sleep_time
 
 
 @typecheck
