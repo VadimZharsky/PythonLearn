@@ -16,22 +16,28 @@ def typecheck(func):
     return checker
 
 
-def cashe_creator(func):
-    memory = {}
-    timer = {}
-    def inner(*args):
-        start_time = time.monotonic()
-        if args in memory:
-            time.sleep(args[0][2])
-            end_time = time.monotonic() - start_time
-            return {"result": memory[args], "end_time": end_time}
-        else:
-            rec_new = func(*args)
-            memory[args] = rec_new
-            time.sleep(args[0][2])
-            end_time = time.monotonic() - start_time
-            return {"result": rec_new, "end_time": end_time}
-    return inner
+def fabric_cashe_n_bench(cashe_dict: dict):
+
+    def cashe_creator(func):
+        memory = {}
+        timer = {}
+        def inner(*args):
+            func_name = func.__name__
+            start_time = time.monotonic()
+            if args in memory:
+                time.sleep(args[0][2])
+                end_time = time.monotonic() - start_time
+                print(func_name)
+                return {"result": memory[args], "end_time": end_time}
+            else:
+                rec_new = func(*args)
+                memory[args] = rec_new
+                time.sleep(args[0][2])
+                end_time = time.monotonic() - start_time
+                print(func_name)
+                return {"result": rec_new, "end_time": end_time}
+        return inner
+    return cashe_creator
 
 
 class ExecutionCounter:

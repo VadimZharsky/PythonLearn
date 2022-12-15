@@ -37,13 +37,14 @@ def test_04():
 
     
     def benchmark(some_var: Any) -> Any:
-        @tasks.cashe_creator
+        bench_dict: dict = {}
+        @tasks.fabric_cashe_n_bench(bench_dict)
         def deleter(some_var):
             res = some_var[0]
             while res > 1:
                 res = res / some_var[1]
             return res 
-      
+        
         res_dict: dict = deleter(some_var)
         res_dict_bench: dict = deleter(some_var)
         print(res_dict)
@@ -51,7 +52,7 @@ def test_04():
         return res_dict
 
     time_sleep = 1
-    var_test = (52352435, 1.0000001, time_sleep)
+    var_test = (52352435234, 1.000001, time_sleep)
     benchmark(var_test)
     # assert abs(end_time - time_sleep) < 0.1
 
