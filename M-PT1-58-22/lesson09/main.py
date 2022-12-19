@@ -1,6 +1,7 @@
 import time
 import pytest
 from typing import Any
+from collections import defaultdict
 
 import tasks
 
@@ -20,8 +21,9 @@ def test_01():
 
 
 def test_03():
-
-    @tasks.cashe_creator
+    bench_dict: dict = {}
+    
+    @tasks.fabric_cashe_n_bench(bench_dict)
     def task_03_cashe(anything: Any) -> Any:
         return anything
 
@@ -38,23 +40,28 @@ def test_04():
     
     def benchmark(some_var: Any) -> Any:
         bench_dict: dict = {}
-        @tasks.fabric_cashe_n_bench(bench_dict)
+        time_sleep = some_var[-1]
+        @tasks.fabric_cashe_n_bench(bench_dict, time_sleep)
         def deleter(some_var):
             res = some_var[0]
             while res > 1:
                 res = res / some_var[1]
             return res 
-        
-        res_dict: dict = deleter(some_var)
-        res_dict_bench: dict = deleter(some_var)
-        print(res_dict)
-        print(res_dict_bench) 
-        return res_dict
+        deleter(some_var)
+        deleter(some_var)
+        return bench_dict
 
     time_sleep = 1
-    var_test = (52352435234, 1.000001, time_sleep)
-    benchmark(var_test)
-    # assert abs(end_time - time_sleep) < 0.1
+    var_test = (5, 2, time_sleep)
+    bench_dict: dict = benchmark(var_test)
+    res_orig = bench_dict["orig"]["result"]
+    res_cashed = bench_dict["benchmarked"]["result"]
+    time_orig = bench_dict["orig"]["end_time"]
+    time_cashed = bench_dict["benchmarked"]["end_time"]
+   
+    assert res_orig == res_cashed 
+    assert abs(time_orig - time_sleep) > 0.1
+    assert abs(time_cashed - time_sleep) < 0.1
 
 def main():
 

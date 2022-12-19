@@ -16,26 +16,33 @@ def typecheck(func):
     return checker
 
 
-def fabric_cashe_n_bench(cashe_dict: dict):
-
+def fabric_cashe_n_bench(cashe_dict: dict, time_sleep: int = 0):
+    memory = {}
     def cashe_creator(func):
-        memory = {}
-        timer = {}
-        def inner(*args):
+
+        def inner(*args, **kwargs):
             func_name = func.__name__
             start_time = time.monotonic()
             if args in memory:
-                time.sleep(args[0][2])
-                end_time = time.monotonic() - start_time
-                print(func_name)
-                return {"result": memory[args], "end_time": end_time}
+                time.sleep(time_sleep) 
+                cashe_dict["benchmarked"] = {
+                    "func_name": func_name,
+                    "args": args,
+                    "result": memory[args],
+                    "end_time": time.monotonic() - start_time
+                }
+                return memory[args]
             else:
-                rec_new = func(*args)
+                rec_new = func(*args, **kwargs)
                 memory[args] = rec_new
-                time.sleep(args[0][2])
-                end_time = time.monotonic() - start_time
-                print(func_name)
-                return {"result": rec_new, "end_time": end_time}
+                time.sleep(time_sleep)
+                cashe_dict["orig"] = {
+                    "func_name": func_name,
+                    "args": args,
+                    "result": memory[args],
+                    "end_time": time.monotonic() - start_time
+                    } 
+                return rec_new
         return inner
     return cashe_creator
 
