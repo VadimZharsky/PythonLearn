@@ -46,14 +46,15 @@ def test_03() -> None:
         time.sleep(timeout)
 
     t0 = time.monotonic()
-    slowpoke(1)
+    slowpoke(3)
     dt = time.monotonic() - t0
 
-    assert abs(dt - 1) < 0.1
+    assert abs(dt - 3) < 0.1
 
     bt = benchmarks.get(slowpoke.__name__)
     assert isinstance(bt, float)
     assert abs(dt - bt) < 0.1
+    print(f"dt: {dt}\nbt:{bt}")
 
 
 def test_04() -> None:

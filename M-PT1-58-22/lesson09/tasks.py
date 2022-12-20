@@ -1,4 +1,5 @@
 from typing import Any
+from typing import Callable
 import time
 import pytest
 
@@ -16,52 +17,42 @@ def typecheck(func):
     return checker
 
 
-def fabric_cashe_n_bench(cashe_dict: dict, time_sleep: int = 0):
-    memory = {}
-    def cashe_creator(func):
-
-        def inner(*args, **kwargs):
-            func_name = func.__name__
+def fabric_benchmark(cashe_dict: dict) -> Callable:
+    def cashe_creator(func) -> Callable:        
+        def inner(*args, **kwargs) -> Any:
+            inner.__name__ = func.__name__
             start_time = time.monotonic()
-            if args in memory:
-                time.sleep(time_sleep) 
-                cashe_dict["benchmarked"] = {
-                    "func_name": func_name,
-                    "args": args,
-                    "result": memory[args],
-                    "end_time": time.monotonic() - start_time
-                }
-                return memory[args]
-            else:
-                rec_new = func(*args, **kwargs)
-                memory[args] = rec_new
-                time.sleep(time_sleep)
-                cashe_dict["orig"] = {
-                    "func_name": func_name,
-                    "args": args,
-                    "result": memory[args],
-                    "end_time": time.monotonic() - start_time
-                    } 
-                return rec_new
+            res = func(*args, **kwargs)
+            cashe_dict[inner.__name__] = time.monotonic() - start_time
+            return res
         return inner
     return cashe_creator
 
 
-class ExecutionCounter:
-    call_count:int = 0 
-    def __init__(self, func):
-        self.func = func
-    def __call__(self, *args, **kwargs):
-        self.call_count += 1
-        return self.call_count
+def cashe_creator(func) -> Callable:
+    memory: dict = {}
+    def inner(*args, **kwargs) -> Any:
+        if args in memory:
+            return memory[args]
+        else:
+            rec_new = func(*args, **kwargs)
+            memory[args] = rec_new
+            return rec_new
+    return inner
 
-def counter(func, counter_dict = {}):
-    counter_dict[func] = 0
-    def call_counter():
-        counter_dict[func] += 1
-        print(f"func: {func.__name__} called {counter_dict[func]} times")
-        return func()
-    return call_counter
+
+
+
+def counter_factory(counter_dict: dict) -> Callable:   
+    def counter(func) -> Callable:
+        counter_dict.setdefault(func.__name__, 0)
+        def call_counter() -> Any:  
+            call_counter.__name__ = func.__name__          
+            res = func() 
+            counter_dict[func.__name__] += 1
+            return res
+        return call_counter
+    return counter
 
 
 def do_twice(func) -> str:
@@ -72,16 +63,6 @@ def do_twice(func) -> str:
     return doubler
 
 
-
-class test_02:
-    counter_dict = {}
-    @counter
-    def f() -> int:
-        return {"f", }
-
-    @counter
-    def g() -> int:
-        return {"g", }
 
 
 @typecheck
