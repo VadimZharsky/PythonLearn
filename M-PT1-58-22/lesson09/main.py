@@ -37,16 +37,35 @@ def test_02() -> None:
 
 
 def test_03()-> None:
-    @tasks.cashe_creator
+    cashe_dict: dict = {}
+    @tasks.cashe_factory(cashe_dict)
     def task_03_cashe(anything: Any) -> Any:
         return anything
 
-    res1 = task_03_cashe("text_to_cashe")
-    res3 = task_03_cashe("another text")
-    z = [task_03_cashe("text_to_cashe") for _ in range(0, 3)][-1]
+    data1: list = []
+    data2: list = ["x"]
 
-    assert z is res1
-    assert not z is res3
+    [task_03_cashe(data1) for _ in "123"]
+    [task_03_cashe(data2) for _ in "123"]
+    # res1 = task_03_cashe("text_to_cashe")
+    # res3 = task_03_cashe("another text")
+    # z = [task_03_cashe("text_to_cashe") for _ in range(0, 3)][-1]
+
+    # assert cache.get(func1.__name__) == [
+    #     [
+    #         ([1],),
+    #         {},
+    #         [1],
+    #     ],
+    #     [
+    #         (["x", 1],),
+    #         {},
+    #         ["x", 1],
+    #     ],
+    # ]
+
+    # assert z is res1
+    # assert not z is res3
 
 
 def test_04()-> None:

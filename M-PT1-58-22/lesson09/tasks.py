@@ -29,18 +29,18 @@ def fabric_benchmark(cashe_dict: dict) -> Callable:
     return cashe_creator
 
 
-def cashe_creator(func) -> Callable:
-    memory: dict = {}
-    def inner(*args, **kwargs) -> Any:
-        if args in memory:
-            return memory[args]
-        else:
-            rec_new = func(*args, **kwargs)
-            memory[args] = rec_new
-            return rec_new
-    return inner
-
-
+def cashe_factory(cashe_dict: dict) -> Callable:
+    def cashe_creator(func) -> Callable:
+        memory: dict = {}
+        def inner(*args, **kwargs) -> Any:
+            if args in memory:
+                return memory[args]
+            else:
+                rec_new = func(*args, **kwargs)
+                memory[args] = rec_new
+                return rec_new
+        return inner
+    return cashe_creator
 
 
 def counter_factory(counter_dict: dict) -> Callable:   
