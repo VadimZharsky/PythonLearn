@@ -6,14 +6,20 @@ import pytest
 
 
 def typecheck(func):
-    def checker(*args):
-        if len(args) != 0:
-            if ([isinstance(x, int) for x in args][-1]):
-                return func(args[0], args[1])
-            else:
-                raise TypeError(f"{args=!r} is not type of int")
-        else:
-            raise TypeError(f"{args=!r} is not type of int")
+    def checker(*args, **kwargs):
+        checker.__name__ = func.__name__
+        res = func(*args, **kwargs)
+        func_annot = func.__annotations__
+        key_annot = kwargs.keys()
+        vars = kwargs.values()
+        for key in key_annot:
+            if func_annot[key] is not Any:
+                for v in vars:
+                    if not isinstance(v, func_annot[key]):
+                        raise TypeError(f"{v=!r} is not of type {func_annot[key]}")
+            if not isinstance(res, type(func_annot["return"])):
+                raise TypeError(f"{res=!r} is not of type {func_annot['return']}")
+        return res
     return checker
 
 
@@ -28,17 +34,19 @@ def fabric_benchmark(cashe_dict: dict) -> Callable:
         return inner
     return cashe_creator
 
-
 def cashe_factory(cashe_dict: dict) -> Callable:
     def cashe_creator(func) -> Callable:
-        memory: dict = {}
+        cashe_dict[func.__name__] = []
         def inner(*args, **kwargs) -> Any:
-            if args in memory:
-                return memory[args]
-            else:
-                rec_new = func(*args, **kwargs)
-                memory[args] = rec_new
-                return rec_new
+            inner.__name__ = func.__name__
+            is_cashe = cashe_dict[func.__name__]
+            for cash in is_cashe:
+                if args in cash and kwargs in cash:
+                    return cash[2]
+            res = func(*args, **kwargs)
+            temp_list: list = [args, kwargs, res]
+            cashe_dict[func.__name__].append(temp_list)                   
+            return res   
         return inner
     return cashe_creator
 
@@ -62,14 +70,3 @@ def do_twice(func) -> str:
         return(f"{text}{restart}")
     return doubler
 
-
-
-
-@typecheck
-def g() -> int:
-    return "1"
-
-
-@typecheck
-def f(num: int, mul: int) -> int:
-    return num * mul
